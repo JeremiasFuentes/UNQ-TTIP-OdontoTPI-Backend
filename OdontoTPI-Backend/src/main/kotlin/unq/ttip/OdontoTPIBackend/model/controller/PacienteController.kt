@@ -50,6 +50,7 @@ class PacienteController {
 
     @PutMapping("/{id}/update")
     fun updatePaciente(@RequestBody paciente:Paciente): Paciente {
+
         return pacienteService.save(paciente)
     }
 
