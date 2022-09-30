@@ -45,12 +45,7 @@ class PacienteController {
 
     @DeleteMapping("/delete/{id}")
     fun deletePaciente(@PathVariable id:Long){
-        var paciente = pacienteService.getPaciente(id)
-        if(paciente != null){
-            ResponseEntity.ok(pacienteService.delete(id))
-        }else{
-            ResponseEntity.badRequest()
-        }
+        ResponseEntity.ok(pacienteService.delete(id))
     }
 
     @PutMapping("/{id}/update")
