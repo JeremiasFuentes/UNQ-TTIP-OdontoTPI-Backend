@@ -18,7 +18,7 @@ permissions:
 
 defaults:
   run:
-    working-directory: ./OdontoTPI-Backend
+    working-directory: /home/runner/work/UNQ-TTIP-OdontoTPI-Backend/UNQ-TTIP-OdontoTPI-Backend/OdontoTPI-Backend
 
 jobs:
   build:
