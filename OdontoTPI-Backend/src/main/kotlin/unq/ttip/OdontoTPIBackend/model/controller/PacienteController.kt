@@ -1,6 +1,7 @@
 package unq.ttip.OdontoTPIBackend.model.controller
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import unq.ttip.OdontoTPIBackend.model.dto.Diagnostico
@@ -33,14 +34,31 @@ class PacienteController {
     fun getPaciente(@PathVariable id: Long) = ResponseEntity.ok(pacienteService.getPaciente(id))
 
     @PostMapping("/save")
-    fun save(@RequestBody paciente: Paciente){
-        ResponseEntity.ok(pacienteService.save(paciente))
+    fun save(@RequestBody paciente: Paciente): ResponseEntity<Paciente> {
+        return ResponseEntity.ok(pacienteService.save(paciente))
     }
 
     @GetMapping("/search")
     fun searchPacientes(@RequestParam("filtro") filtro: String) : ResponseEntity<List<Paciente>>{
         return ResponseEntity.ok(pacienteService.searchPacientes(filtro))
     }
+
+    @DeleteMapping("/delete/{id}")
+    fun deletePaciente(@PathVariable id:Long){
+        var paciente = pacienteService.getPaciente(id)
+        if(paciente != null){
+            ResponseEntity.ok(pacienteService.delete(id))
+        }else{
+            ResponseEntity.badRequest()
+        }
+    }
+
+    @PutMapping("/{id}/update")
+    fun updatePaciente(@RequestBody paciente:Paciente): Paciente {
+        return pacienteService.save(paciente)
+    }
+
+
 
 
 }

@@ -25,6 +25,12 @@ dependencies {
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("org.postgresql:postgresql")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	// https://mvnrepository.com/artifact/org.mockito/mockito-core
+	testImplementation("org.mockito:mockito-core:4.8.0")
+	// https://mvnrepository.com/artifact/com.h2database/h2
+	testImplementation("com.h2database:h2:2.1.214")
+
+
 }
 
 tasks.withType<KotlinCompile> {

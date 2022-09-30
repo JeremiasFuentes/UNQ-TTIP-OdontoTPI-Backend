@@ -18,4 +18,7 @@ class PacienteService {
     fun getPaciente(id:Long) = pacienteRepository.findById(id)
     fun existPaciente(id:Long) = pacienteRepository.existsById(id)
     fun searchPacientes(filtro:String) : List<Paciente> { return pacienteRepository.searchPaciente(filtro)}
+
+    fun delete(id:Long) = pacienteRepository.deleteById(id)
+
 }
