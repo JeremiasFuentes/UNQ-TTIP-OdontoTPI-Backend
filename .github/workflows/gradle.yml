@@ -32,5 +32,6 @@ jobs:
     
     - name: Execute Gradle build
       working-directory: ./OdontoTPI-Backend
-      run: ./gradlew build
+      run: chmod +x gradlew
+           ./gradlew build
 
