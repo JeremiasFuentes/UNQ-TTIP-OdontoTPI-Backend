@@ -31,5 +31,6 @@ jobs:
       uses: gradle/gradle-build-action@v2
     
     - name: Execute Gradle build
-      run: ./OdontoTPI-Backend/gradlew build
+      working-directory: ./OdontoTPI-Backend
+      run: ./gradlew build
 
