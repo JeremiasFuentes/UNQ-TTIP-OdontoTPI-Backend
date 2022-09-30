@@ -16,6 +16,10 @@ on:
 permissions:
   contents: read
 
+defaults:
+  run:
+    working-directory: ./OdontoTPI-Backend
+
 jobs:
   build:
 
@@ -30,7 +34,6 @@ jobs:
       with:
         java-version: '18'
         distribution: 'temurin'
-    - run: gradle init
     - name: Build with Gradle
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
