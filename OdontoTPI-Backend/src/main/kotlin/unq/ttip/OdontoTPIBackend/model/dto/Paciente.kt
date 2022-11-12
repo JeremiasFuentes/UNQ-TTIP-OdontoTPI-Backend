@@ -17,18 +17,31 @@ class Paciente {
     var dni: String = ""
     var mail: String = ""
     var tel: String = ""
+    var domicilio : String = ""
+    var adulto: Boolean = true
 
     @OneToMany(mappedBy = "paciente", fetch = FetchType.LAZY,
         cascade = [CascadeType.ALL]
     )
     var piezas: MutableList<PiezaDentaria>? = mutableListOf()
 
-    constructor(nombre: String, apellido: String, dni: String, mail: String, tel: String) {
+    @OneToMany(mappedBy = "paciente", fetch = FetchType.LAZY,
+        cascade = [CascadeType.ALL]
+    )
+    var turnos: MutableList<Turno>? = mutableListOf()
+
+    @OneToOne(cascade = [CascadeType.ALL] , fetch = FetchType.EAGER)
+    @JoinColumn(name = "historiaClinica_id", referencedColumnName = "id")
+    var historiaClinica: HistoriaClinica = HistoriaClinica()
+
+    constructor(nombre: String, apellido: String, dni: String, mail: String, tel: String, domicilio:String, adulto: Boolean) {
         this.nombre = nombre
         this.apellido = apellido
         this.dni = dni
         this.mail = mail
         this.tel = tel
+        this.domicilio = domicilio
+        this.adulto = adulto
     }
 
 
@@ -44,5 +57,20 @@ class Paciente {
         return this.piezas
     }
 
+    fun setHistoriaClinca(historia: HistoriaClinica) {
+        this.historiaClinica = historia
+    }
+
+    fun getHistoria(): HistoriaClinica {
+        return this.historiaClinica
+    }
+
+    fun setTurnosDePaciente(turnos: MutableList<Turno>) {
+        this.turnos = turnos
+    }
+
+    fun getTurnosDePaciente(): MutableList<Turno>? {
+        return this.turnos
+    }
 
 }

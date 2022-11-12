@@ -3,9 +3,12 @@ package unq.ttip.OdontoTPIBackend.model.controller
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import unq.ttip.OdontoTPIBackend.model.dto.HistoriaClinica
 import unq.ttip.OdontoTPIBackend.model.dto.Paciente
 import unq.ttip.OdontoTPIBackend.model.dto.PiezaDentaria
+import unq.ttip.OdontoTPIBackend.model.dto.Turno
 import unq.ttip.OdontoTPIBackend.model.service.PacienteService
+import unq.ttip.OdontoTPIBackend.model.service.TurnoService
 
 
 @RestController
@@ -16,8 +19,23 @@ class PacienteController {
     @Autowired
     lateinit var pacienteService: PacienteService
 
+    @Autowired
+    lateinit var turnoService: TurnoService
+
     @GetMapping
     fun pacientes() = ResponseEntity.ok(pacienteService.getAll())
+
+    @GetMapping("/turnos")
+    fun turnos() = ResponseEntity.ok(turnoService.getAll())
+
+    @GetMapping("/{id}/turnos")
+    fun getTurnos(@PathVariable id: Long) = ResponseEntity.ok(pacienteService.getTurnos(id))
+
+    @PostMapping("/{id}/turno/save")
+    fun saveTurno(@PathVariable id:Long,@RequestBody turno: Turno): ResponseEntity<Paciente> {
+        return ResponseEntity.ok(pacienteService.saveTurno(id,turno))
+    }
+
 
     @PutMapping("/{id}/diag")
     fun addDiagostico(@PathVariable id:Long, @RequestBody diagnostico:String): Paciente {
@@ -33,6 +51,15 @@ class PacienteController {
 
         return pacienteService.updatePiezas(id,piezas)
     }
+
+    @PutMapping("/{id}/historiaClinica")
+    fun updateHistoria(@PathVariable id:Long, @RequestBody historia: HistoriaClinica): Paciente {
+
+        return pacienteService.updateHistoria(id,historia)
+    }
+
+    @GetMapping("/{id}/historiaClinica")
+    fun getHistoria(@PathVariable id: Long) = ResponseEntity.ok(pacienteService.getHistoria(id))
 
     @GetMapping("/{id}")
     fun getPaciente(@PathVariable id: Long) = ResponseEntity.ok(pacienteService.getPaciente(id))

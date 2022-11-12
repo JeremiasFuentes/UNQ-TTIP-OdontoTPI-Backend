@@ -17,6 +17,7 @@ class PiezaDentaria {
     var centro: String = "white"
     var izquierda: String = "white"
     var derecha: String = "white"
+    var observaciones: String = ""
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "paciente_legajo", nullable = false)

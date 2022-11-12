@@ -1,4 +1,4 @@
-INSERT INTO paciente VALUES ('0','Ruiz','12345678','f.ruiz@unq.com','Francisco','1234567890');
+INSERT INTO paciente VALUES ('0',true,'Ruiz','12345678','f.ruiz@unq.com','Francisco','1234567890');
 --INSERT INTO paciente VALUES ('2','Fuentes','12345679','j.fuentes@unq.com','Jeremias','1234567890');
 --INSERT INTO paciente VALUES ('3','Fuentes','12345670','n.fuentes@unq.com','Nicolas','1234567890');
 --INSERT INTO paciente VALUES ('4','Jackson','98765432','m.jackson@unq.com','Michael','1234567890');
