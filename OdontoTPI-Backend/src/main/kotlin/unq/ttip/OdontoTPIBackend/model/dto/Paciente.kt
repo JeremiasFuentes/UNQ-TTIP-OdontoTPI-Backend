@@ -34,7 +34,9 @@ class Paciente {
     @JoinColumn(name = "historiaClinica_id", referencedColumnName = "id")
     var historiaClinica: HistoriaClinica = HistoriaClinica()
 
-    constructor(nombre: String, apellido: String, dni: String, mail: String, tel: String, domicilio:String, adulto: Boolean) {
+
+
+    constructor(nombre: String, apellido: String, dni: String, mail: String, tel: String, domicilio:String, adulto: Boolean){
         this.nombre = nombre
         this.apellido = apellido
         this.dni = dni
