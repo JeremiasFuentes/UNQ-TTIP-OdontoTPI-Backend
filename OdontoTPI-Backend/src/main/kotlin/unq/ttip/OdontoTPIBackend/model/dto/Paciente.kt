@@ -30,6 +30,11 @@ class Paciente {
     )
     var turnos: MutableList<Turno>? = mutableListOf()
 
+    @OneToMany(mappedBy = "paciente", fetch = FetchType.LAZY,
+        cascade = [CascadeType.ALL]
+    )
+    var archivos: MutableList<Archivo>? = mutableListOf()
+
     @OneToOne(cascade = [CascadeType.ALL] , fetch = FetchType.EAGER)
     @JoinColumn(name = "historiaClinica_id", referencedColumnName = "id")
     var historiaClinica: HistoriaClinica = HistoriaClinica()
@@ -73,6 +78,14 @@ class Paciente {
 
     fun getTurnosDePaciente(): MutableList<Turno>? {
         return this.turnos
+    }
+
+    fun setArchivosDePaciente(archivos: MutableList<Archivo>) {
+        this.archivos = archivos
+    }
+
+    fun getArchivosDePaciente(): MutableList<Archivo>? {
+        return this.archivos
     }
 
 }

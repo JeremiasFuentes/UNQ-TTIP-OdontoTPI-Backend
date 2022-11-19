@@ -1,14 +1,20 @@
 package unq.ttip.OdontoTPIBackend.model.controller
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.core.io.ByteArrayResource
+import org.springframework.core.io.Resource
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import unq.ttip.OdontoTPIBackend.model.dto.HistoriaClinica
-import unq.ttip.OdontoTPIBackend.model.dto.Paciente
-import unq.ttip.OdontoTPIBackend.model.dto.PiezaDentaria
-import unq.ttip.OdontoTPIBackend.model.dto.Turno
+import org.springframework.web.multipart.MultipartFile
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder
+import unq.ttip.OdontoTPIBackend.model.dto.*
+import unq.ttip.OdontoTPIBackend.model.model.RespondeDataFile
 import unq.ttip.OdontoTPIBackend.model.service.PacienteService
 import unq.ttip.OdontoTPIBackend.model.service.TurnoService
+import java.io.IOException
 
 
 @RestController
@@ -88,7 +94,28 @@ class PacienteController {
         return pacienteService.update(paciente)
     }
 
+    @PostMapping("/{id}/file")
+    @Throws(IOException::class)
+    fun uploadFile(@PathVariable id: Long ,@RequestParam("file") file: MultipartFile?): ResponseEntity<Archivo> {
 
+        var archivo = pacienteService.saveFile(id,file)
+        return ResponseEntity.ok(archivo)
+
+    }
+
+    @GetMapping("/{id}/{fileName}")
+    fun downloadFile(@PathVariable id: Long ,@PathVariable fileName: String?): ResponseEntity<Resource>? {
+        val archivo: Archivo? = pacienteService.getFile(id ,fileName)
+        return ResponseEntity.status(HttpStatus.OK)
+            .contentType(MediaType.parseMediaType(archivo!!.tipo))
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + archivo!!.nombre + "\"")
+            .body(archivo!!.data?.let { ByteArrayResource(it) })
+    }
+
+    @GetMapping("/{id}/files")
+    fun getFiles(@PathVariable id: Long ): ResponseEntity<List<Archivo>> {
+        return ResponseEntity.ok(pacienteService.getFiles(id))
+    }
 
 
 }

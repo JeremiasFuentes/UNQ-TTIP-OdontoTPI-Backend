@@ -2,14 +2,13 @@ package unq.ttip.OdontoTPIBackend.model.service
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import unq.ttip.OdontoTPIBackend.model.dto.HistoriaClinica
-import unq.ttip.OdontoTPIBackend.model.dto.Paciente
-import unq.ttip.OdontoTPIBackend.model.dto.PiezaDentaria
-import unq.ttip.OdontoTPIBackend.model.dto.Turno
+import org.springframework.web.multipart.MultipartFile
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder
+import unq.ttip.OdontoTPIBackend.model.dto.*
+import unq.ttip.OdontoTPIBackend.model.repository.ArchivosRepository
 import unq.ttip.OdontoTPIBackend.model.repository.PacienteRepository
 import unq.ttip.OdontoTPIBackend.model.repository.PiezaDentariaRepository
 import unq.ttip.OdontoTPIBackend.model.repository.TurnoRepository
-import java.util.*
 import javax.transaction.Transactional
 
 @Transactional
@@ -24,6 +23,9 @@ class PacienteService {
 
     @Autowired
     lateinit var turnoRepository: TurnoRepository
+
+    @Autowired
+    lateinit var archivosRepository: ArchivosRepository
 
     fun getAll() = pacienteRepository.findAll()
     fun save(paciente:Paciente): Paciente {
@@ -97,6 +99,34 @@ class PacienteService {
         turno.setPaciente(paciente)
         paciente.turnos = turnos
         return pacienteRepository.save(paciente)
+    }
+
+    @Transactional
+    fun saveFile(id: Long, file:MultipartFile?): Archivo {
+        var paciente = this.getPaciente(id).get()
+        var archivos = paciente.getArchivosDePaciente()
+        var downloadURL = ServletUriComponentsBuilder.fromCurrentContextPath().path("paciente/"+ id + "/" + file!!.getOriginalFilename()).toUriString()
+        val fileData: Archivo = archivosRepository.save(
+            Archivo(file?.getOriginalFilename()!!, file.getContentType()!!,downloadURL, file.getBytes(),paciente)
+        )
+        archivos!!.add(fileData)
+        paciente.setArchivosDePaciente(archivos)
+        pacienteRepository.save(paciente)
+        return fileData
+    }
+
+    @Transactional
+    fun getFile(id: Long, fileName: String?): Archivo? {
+        var paciente = this.getPaciente(id).get()
+        var archivos = paciente.getArchivosDePaciente()
+        var archivo = archivos!!.find { a -> a.nombre == fileName }
+        return archivo
+    }
+    @Transactional
+    fun getFiles(id: Long): List<Archivo>? {
+        var paciente = this.getPaciente(id).get()
+        var archivos = paciente.getArchivosDePaciente()
+        return archivos
     }
 
 }
