@@ -15,6 +15,7 @@ import unq.ttip.OdontoTPIBackend.model.model.RespondeDataFile
 import unq.ttip.OdontoTPIBackend.model.service.PacienteService
 import unq.ttip.OdontoTPIBackend.model.service.TurnoService
 import java.io.IOException
+import java.time.LocalDate
 
 
 @RestController
@@ -103,6 +104,15 @@ class PacienteController {
 
     }
 
+    @PostMapping("/{id}/tratamiento")
+    @Throws(IOException::class)
+    fun addTratamiento(@PathVariable id: Long ,@RequestBody tratamiento: Tratamiento): ResponseEntity<Tratamiento> {
+
+        var archivo = pacienteService.saveTratamiento(id,tratamiento)
+        return ResponseEntity.ok(archivo)
+
+    }
+
     @GetMapping("/{id}/{fileName}")
     fun downloadFile(@PathVariable id: Long ,@PathVariable fileName: String?): ResponseEntity<Resource>? {
         val archivo: Archivo? = pacienteService.getFile(id ,fileName)
@@ -115,6 +125,11 @@ class PacienteController {
     @GetMapping("/{id}/files")
     fun getFiles(@PathVariable id: Long ): ResponseEntity<List<Archivo>> {
         return ResponseEntity.ok(pacienteService.getFiles(id))
+    }
+
+    @GetMapping("/{id}/tratamientos")
+    fun getTratamientos(@PathVariable id: Long ): ResponseEntity<List<Tratamiento>> {
+        return ResponseEntity.ok(pacienteService.getTratamientos(id))
     }
 
 

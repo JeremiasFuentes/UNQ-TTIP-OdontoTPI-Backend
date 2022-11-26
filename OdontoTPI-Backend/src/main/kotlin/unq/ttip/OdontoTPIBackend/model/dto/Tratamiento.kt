@@ -3,40 +3,41 @@ package unq.ttip.OdontoTPIBackend.model.dto
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
 import org.springframework.format.annotation.DateTimeFormat
+import java.text.DateFormat
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import javax.persistence.*
 
+
 @Entity
-class Turno {
+class Tratamiento {
 
     @Id
     @GeneratedValue
     var id: Long? = null
 
-    @Column(name="Subject")
-    @JsonProperty("Subject")
-    var Subject: String = ""
-
-    @Column(name="StartTime")
-    @JsonProperty("StartTime")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME )
-    @JsonFormat(pattern = "YYYY-MM-dd HH:mm")
-    var StartTime: LocalDateTime = LocalDateTime.now()
-
-    @Column(name="EndTime")
-    @JsonProperty("EndTime")
+    @Column(name="fecha")
+    @JsonProperty("fecha")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    @JsonFormat(pattern = "YYYY-MM-dd HH:mm")
-    var EndTime: LocalDateTime = LocalDateTime.now()
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    var fecha: LocalDateTime = LocalDateTime.now()
 
-    @Column(name="Description")
-    @JsonProperty("Description")
-    var Description: String = ""
+    @JsonProperty(value = "tratamiento")
+    var tratamiento: String = ""
+
+    @Column(columnDefinition="TEXT", length = 2048)
+    @JsonProperty(value = "firma")
+    var firma: String = ""
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "paciente_legajo", nullable = false)
     private var paciente: Paciente? = null
+
+    constructor(fecha: LocalDateTime, tratamiento: String, firma: String, paciente: Paciente?) {
+        this.fecha = fecha
+        this.tratamiento = tratamiento
+        this.firma = firma
+        this.paciente = paciente
+    }
 
     public fun setPaciente(paciente: Paciente){
         this.paciente= paciente

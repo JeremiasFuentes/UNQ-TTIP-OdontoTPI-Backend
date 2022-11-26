@@ -5,10 +5,7 @@ import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import unq.ttip.OdontoTPIBackend.model.dto.*
-import unq.ttip.OdontoTPIBackend.model.repository.ArchivosRepository
-import unq.ttip.OdontoTPIBackend.model.repository.PacienteRepository
-import unq.ttip.OdontoTPIBackend.model.repository.PiezaDentariaRepository
-import unq.ttip.OdontoTPIBackend.model.repository.TurnoRepository
+import unq.ttip.OdontoTPIBackend.model.repository.*
 import javax.transaction.Transactional
 
 @Transactional
@@ -26,6 +23,9 @@ class PacienteService {
 
     @Autowired
     lateinit var archivosRepository: ArchivosRepository
+
+    @Autowired
+    lateinit var tratamientoRepository: TratamientoRepository
 
     fun getAll() = pacienteRepository.findAll()
     fun save(paciente:Paciente): Paciente {
@@ -127,6 +127,24 @@ class PacienteService {
         var paciente = this.getPaciente(id).get()
         var archivos = paciente.getArchivosDePaciente()
         return archivos
+    }
+
+    fun saveTratamiento(id: Long, tratamiento: Tratamiento): Tratamiento {
+        var paciente = this.getPaciente(id).get()
+        var tratamientos = paciente.getTratamientosDePaciente()
+        val fileData: Tratamiento = tratamientoRepository.save(
+            Tratamiento(tratamiento.fecha, tratamiento.tratamiento ,tratamiento.firma ,paciente)
+        )
+        tratamientos!!.add(fileData)
+        paciente.setTratamientosDePaciente(tratamientos)
+        pacienteRepository.save(paciente)
+        return fileData
+    }
+
+    fun getTratamientos(id: Long): List<Tratamiento>? {
+        var paciente = this.getPaciente(id).get()
+        var tratamientos = paciente.getTratamientosDePaciente()
+        return tratamientos
     }
 
 }

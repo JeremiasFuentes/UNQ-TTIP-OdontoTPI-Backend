@@ -33,6 +33,11 @@ class Paciente {
     @OneToMany(mappedBy = "paciente", fetch = FetchType.LAZY,
         cascade = [CascadeType.ALL]
     )
+    var tratamientos: MutableList<Tratamiento>? = mutableListOf()
+
+    @OneToMany(mappedBy = "paciente", fetch = FetchType.LAZY,
+        cascade = [CascadeType.ALL]
+    )
     var archivos: MutableList<Archivo>? = mutableListOf()
 
     @OneToOne(cascade = [CascadeType.ALL] , fetch = FetchType.EAGER)
@@ -86,6 +91,14 @@ class Paciente {
 
     fun getArchivosDePaciente(): MutableList<Archivo>? {
         return this.archivos
+    }
+
+    fun getTratamientosDePaciente(): MutableList<Tratamiento>? {
+        return this.tratamientos
+    }
+
+    fun setTratamientosDePaciente(tratamientos: MutableList<Tratamiento>) {
+        this.tratamientos = tratamientos
     }
 
 }
